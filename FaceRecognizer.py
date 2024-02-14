@@ -140,7 +140,7 @@ def recognizer():
     #calling the cascade files for recognition
     face_cascade = cv2.CascadeClassifier('cascades/haarcascade_frontalface_alt.xml')  
     eye_cascade= cv2.CascadeClassifier('cascades/haarcascade_eye.xml')
-    smile_cascade = cv2.CascadeClassifier('cascades/haarcascade_smile.xml')
+    #smile_cascade = cv2.CascadeClassifier('cascades/haarcascade_smile.xml')
 
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read("trainner.yml")         #Read the trained data
@@ -176,22 +176,21 @@ def recognizer():
             #Only show the recognition if has given amount of confirmation
             #Lesser the conf, better the recognition
             
-            if conf>=4 and conf <= 60:          
-                font = cv2.FONT_HERSHEY_SIMPLEX
-                name = labels[id_]
-                color = (255,255,255)
-                stroke = 2
-                cv2.putText(frame, name, (x,y), font, 1 , color, stroke, cv2.LINE_AA)
-                
+            #if conf>=4 and conf <= 60:          
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            name = labels[id_]
+            color = (255,255,255)
+            stroke = 2
+            cv2.putText(frame, name + ' ' + str( int (conf)), (x,y), font, 1 , color, stroke, cv2.LINE_AA)
 
-                color=(255,255,255)
-                stroke = 2
-                end_cord_x = x+w
-                end_cord_y = y+h
-                cv2.rectangle(frame, (x,y),(end_cord_x,end_cord_y), color, stroke)
-                eyes = eye_cascade.detectMultiScale(roi_gray,scaleFactor=1.5,minNeighbors=3)
-                for (ex,ey,ew,eh) in eyes:
-                    cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
+            color=(255,255,255)
+            stroke = 2
+            end_cord_x = x+w
+            end_cord_y = y+h
+            cv2.rectangle(frame, (x,y),(end_cord_x,end_cord_y), color, stroke)
+            eyes = eye_cascade.detectMultiScale(roi_gray,scaleFactor=1.5,minNeighbors=3)
+            for (ex,ey,ew,eh) in eyes:
+                cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
 
         #Display the resulting frame
         cv2.imshow('frame',frame)
@@ -220,7 +219,6 @@ def name_a():
 def view_images():
     
     import cv2
-    import numpy
     import os
 
     #Printing the names of the stored facedata
@@ -270,13 +268,13 @@ def click():
 
         #To show the frame
         cv2.imshow('frame',img)
+        font = cv2.FONT_HERSHEY_SIMPLEX
         cv2.putText(img, "q- capture\nz- close",
                     (70, 50), font, 0.8, (0, 255, 0), 2, cv2.LINE_AA)
-        if cv2.waitKey(20) & 0xFF == ord('q'):              #To break the loop for camera using 'z' key
+        if cv2.waitKey(20) & 0xFF == ord('q'):              
                 name=input('save as : ')
                 path=os.path.join(BASE_DIR,'others')
-                cv2.imwrite(os.path.join(path,name+'.jpg'), frame)
-                
+                cv2.imwrite(os.path.join(path,name+'.jpg'), frame)  
                 break
 
         else:
